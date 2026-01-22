@@ -9,7 +9,7 @@
         * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         body {
             margin: 0; padding: 0;
-            background-color: #2d3436; /* Màu nền đen/xám bao quanh khung game */
+            background-color: #2d3436;
             height: 100vh; width: 100vw;
             display: flex; justify-content: center; align-items: center;
             overflow: hidden;
@@ -17,15 +17,14 @@
         }
 
         /* --- 2. KHUNG GAME CHUẨN TỶ LỆ 16:9 --- */
-        /* Khung này quy định tỷ lệ cho TOÀN BỘ game, bao gồm cả ảnh nền bắt đầu */
         #game-stage {
             position: relative;
             width: 100%;
-            max-width: 177.78vh; /* Giới hạn chiều rộng theo tỷ lệ 16/9 của chiều cao */
-            aspect-ratio: 16/9;  /* Buộc khung luôn giữ tỷ lệ 16:9 */
+            max-width: 177.78vh;
+            aspect-ratio: 16/9;
             max-height: 100vh;
             background-image: url('st.png');
-            background-size: 100% 100%; /* Ảnh sẽ luôn vừa khít khung 16:9 này */
+            background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
@@ -38,12 +37,30 @@
             background: rgba(255, 255, 255, 0.3); z-index: 1; pointer-events: none;
         }
 
+        /* --- TÊN TRÒ CHƠI (ĐÃ THÊM VÀ CĂN GIỮA) --- */
+        .game-name-tag {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%); /* Căn giữa */
+            top: 2%; 
+            background-color: #ff7675;
+            color: #ffffff;
+            padding: 0.8vh 3vw;
+            border-radius: 50px;
+            border: 3px solid #ffffff;
+            font-weight: bold;
+            font-size: clamp(16px, 2.5vh, 22px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 10;
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
         /* --- 3. MÀN HÌNH BẮT ĐẦU (INTRO) --- */
         #start-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* CẬP NHẬT: Sử dụng file nen.png */
             background-image: url('nen.png'); 
-            /* Kích thước 100% 100% sẽ ép ảnh vừa khít với khung chứa 16:9 bên ngoài */
             background-size: 100% 100%; 
             background-position: center;
             z-index: 999;
@@ -62,11 +79,12 @@
 
         /* Tiêu đề câu hỏi */
         .question-box {
-            height: 15%; /* Chiếm 15% chiều cao khung */
+		margin-top: 9vh;
+            height: 15%;
             display: flex; justify-content: center; align-items: center;
         }
         .question-title {
-            text-align: center; font-size: clamp(16px, 2.5vh, 24px); /* Chữ tự co giãn */
+            text-align: center; font-size: clamp(16px, 2.5vh, 24px);
             color: #d63031; font-weight: bold;
             background: rgba(255,255,255,0.95); padding: 1vh 2vw;
             border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -80,22 +98,21 @@
         }
 
         .food-item {
-            width: 11vh; height: 11vh; /* Kích thước dựa theo chiều cao màn hình */
+            width: 11vh; height: 11vh;
             background: white; border-radius: 1vh; padding: 0.5vh;
             cursor: grab; transition: transform 0.2s;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
             display: flex; justify-content: center; align-items: center;
-            z-index: 100; /* Đảm bảo nổi lên trên */
+            z-index: 100;
         }
         .food-item:active { cursor: grabbing; transform: scale(1.1); }
         .food-item img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 
-        /* Chế độ đáp án chữ (Câu 5,6) */
         .items-area.text-mode .food-item { width: 18vh; height: 12vh; }
 
         /* Khu vực Giỏ */
         .basket-area {
-            height: 25%; /* Chiếm 25% chiều cao dưới cùng */
+            height: 25%;
             display: flex; justify-content: center; align-items: flex-end;
             padding-bottom: 2vh; gap: 2vw;
         }
@@ -124,7 +141,6 @@
         .btn:active { transform: translateY(2px); }
         
         .btn-start {
-            /* CSS cho nút bắt đầu nằm giữa màn hình intro */
             padding: 2vh 4vw; font-size: clamp(20px, 4vh, 40px);
             background: #00b894; color: white; border: 4px solid white;
             animation: pulse 1.5s infinite;
@@ -166,6 +182,8 @@
     <div id="game-stage">
         
         <div class="overlay"></div>
+
+        <div class="game-name-tag"></div>
         
         <audio id="bg-music" loop><source src="nen.mp3" type="audio/mpeg"></audio>
         <audio id="sound-wrong"><source src="sai.mp3" type="audio/mpeg"></audio>
@@ -176,15 +194,12 @@
         </div>
 
         <div class="screen" id="q1">
-            <div class="question-box"><div class="question-title">Câu 1: Bé hãy chọn các thực phẩm thuộc nhóm <b>BỘT ĐƯỜNG</b>?</div></div>
+            <div class="question-box"><div class="question-title">Câu 1: Bé xếp các thực phẩm dưới đây vào nhóm dinh dưỡng nào <b></b>?</div></div>
             <div class="items-area">
                 <div class="food-item" draggable="true" id="q1-banhmi" data-target="carb"><img src="banhmi.png" alt="Bánh mì"></div>
                 <div class="food-item" draggable="true" id="q1-khoai" data-target="carb"><img src="khoailang.png" alt="Khoai"></div>
                 <div class="food-item" draggable="true" id="q1-dau" data-target="carb"><img src="daudo.png" alt="Đậu"></div>
                 <div class="food-item" draggable="true" id="q1-lua" data-target="carb"><img src="luami.png" alt="Lúa mì"></div>
-                <div class="food-item" draggable="true" id="q1-rau" data-target="vitamin"><img src="rau.png" alt="Rau"></div>
-                <div class="food-item" draggable="true" id="q1-ca" data-target="protein"><img src="ca.png" alt="Cá"></div>
-                <div class="food-item" draggable="true" id="q1-tom" data-target="protein"><img src="tom.png" alt="Tôm"></div>
             </div>
             <div class="basket-area">
                 <div class="basket b-vitamin" data-type="vitamin"></div>
@@ -199,7 +214,7 @@
         </div>
 
         <div class="screen" id="q2">
-            <div class="question-box"><div class="question-title">Câu 2: Bé hãy chọn các thực phẩm thuộc nhóm <b>CHẤT BÉO</b>?</div></div>
+            <div class="question-box"><div class="question-title">Câu 2:Bé xếp các thực phẩm dưới đây vào nhóm dinh dưỡng nào <b></b>?</div></div>
             <div class="items-area">
                 <div class="food-item" draggable="true" id="q2-phomai" data-target="fat"><img src="phomai.png"></div>
                 <div class="food-item" draggable="true" id="q2-bo" data-target="fat"><img src="bo.png"></div>
@@ -207,9 +222,6 @@
                 <div class="food-item" draggable="true" id="q2-hat" data-target="fat"><img src="hatoccho.png"></div>
                 <div class="food-item" draggable="true" id="q2-dauca" data-target="fat"><img src="dauca.png"></div>
                 <div class="food-item" draggable="true" id="q2-dauan" data-target="fat"><img src="dauan.png"></div>
-                <div class="food-item" draggable="true" id="q2-tom" data-target="protein"><img src="tom.png"></div>
-                <div class="food-item" draggable="true" id="q2-ca" data-target="protein"><img src="ca.png"></div>
-                <div class="food-item" draggable="true" id="q2-rau" data-target="vitamin"><img src="rau.png"></div>
             </div>
             <div class="basket-area">
                 <div class="basket b-vitamin" data-type="vitamin"></div>
@@ -314,15 +326,14 @@
     </div> <script>
         /**
          * GAME MODULE
-         * Sử dụng mẫu thiết kế Module Pattern để đóng gói logic, tránh ô nhiễm biến toàn cục.
          */
         const GameApp = (() => {
             // Cấu hình số đáp án đúng cho mỗi màn
+            // ĐÃ SỬA: 'q1' từ 7 xuống 4 để khớp với số lượng hình còn lại
             const levelConfig = {
-                'q1': 7, 'q2': 9, 'q3': 5, 'q4': 4, 'q5': 1, 'q6': 1
+                'q1': 4, 'q2': 6, 'q3': 5, 'q4': 4, 'q5': 1, 'q6': 1
             };
 
-            // Trạng thái game hiện tại
             let state = {
                 currentCorrect: 0,
                 touchItem: null,
@@ -330,7 +341,6 @@
                 touchOffsetY: 0
             };
 
-            // Cache DOM elements
             const dom = {
                 music: document.getElementById('bg-music'),
                 wrongSound: document.getElementById('sound-wrong'),
@@ -340,10 +350,7 @@
                 screens: document.querySelectorAll('.screen')
             };
 
-            // --- CÁC HÀM XỬ LÝ LOGIC CHÍNH ---
-
             const start = () => {
-                // Hiệu ứng mờ dần màn hình intro
                 dom.startScreen.style.opacity = '0';
                 setTimeout(() => dom.startScreen.style.display = 'none', 500);
                 document.getElementById('q1').classList.add('active-screen');
@@ -376,7 +383,6 @@
             const showVictory = () => {
                 dom.screens.forEach(s => s.classList.remove('active-screen'));
                 dom.victoryScreen.style.display = 'flex';
-                // Tạo hiệu ứng pháo hoa đơn giản
                 createConfetti(dom.victoryScreen);
             };
 
@@ -386,8 +392,6 @@
                 audio.play().catch(e => {});
             };
 
-            // --- XỬ LÝ LOGIC KÉO THẢ (DRAG & DROP) ---
-
             const checkResult = (item, basket) => {
                 const itemTarget = item.getAttribute('data-target');
                 const basketType = basket.getAttribute('data-type');
@@ -395,16 +399,11 @@
                 const requiredCount = levelConfig[currentScreenId];
 
                 if (itemTarget === basketType) {
-                    // ĐÚNG
                     playSound('correct');
-                    item.style.display = 'none'; // Ẩn vật phẩm
-                    
-                    // Hiệu ứng ngôi sao bay lên
+                    item.style.display = 'none'; 
                     showFeedback(basket, '⭐');
-                    
                     state.currentCorrect++;
                     
-                    // Kiểm tra hoàn thành màn chơi
                     if (state.currentCorrect >= requiredCount) {
                         const btnNext = document.getElementById('btn-next-' + currentScreenId);
                         if(btnNext) {
@@ -413,12 +412,9 @@
                         }
                     }
                 } else {
-                    // SAI
                     playSound('wrong');
                     basket.classList.add('shake');
                     setTimeout(() => basket.classList.remove('shake'), 500);
-                    
-                    // Trả vật phẩm về chỗ cũ
                     item.classList.remove('hidden');
                     item.style.position = 'static';
                     item.style.transform = 'none';
@@ -451,13 +447,10 @@
                 }
             };
 
-            // --- SỰ KIỆN MOUSE/TOUCH ---
-
             const initEvents = () => {
                 const items = document.querySelectorAll('.food-item');
                 const baskets = document.querySelectorAll('.basket');
 
-                // Desktop Drag Events
                 items.forEach(item => {
                     item.addEventListener('dragstart', (e) => {
                         e.dataTransfer.setData('text/id', e.target.id);
@@ -480,12 +473,10 @@
                     });
                 });
 
-                // Mobile Touch Events (Custom Logic)
                 items.forEach(item => {
                     item.addEventListener('touchstart', (e) => {
                         state.touchItem = item;
                         const touch = e.touches[0];
-                        // Tính toán offset để ngón tay không che mất vật phẩm
                         const rect = item.getBoundingClientRect();
                         state.touchOffsetX = touch.clientX - rect.left;
                         state.touchOffsetY = touch.clientY - rect.top;
@@ -495,7 +486,7 @@
 
                     item.addEventListener('touchmove', (e) => {
                         if (!state.touchItem) return;
-                        e.preventDefault(); // Ngăn cuộn màn hình
+                        e.preventDefault(); 
                         const touch = e.touches[0];
                         state.touchItem.style.left = (touch.clientX - state.touchOffsetX) + 'px';
                         state.touchItem.style.top = (touch.clientY - state.touchOffsetY) + 'px';
@@ -503,19 +494,14 @@
 
                     item.addEventListener('touchend', (e) => {
                         if (!state.touchItem) return;
-                        
-                        // Ẩn tạm thời để tìm element bên dưới
                         state.touchItem.style.display = 'none';
                         const touch = e.changedTouches[0];
                         const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                        state.touchItem.style.display = 'flex'; // Hiện lại
-
+                        state.touchItem.style.display = 'flex'; 
                         const basket = elemBelow ? elemBelow.closest('.basket') : null;
-                        
                         if (basket) {
                             checkResult(state.touchItem, basket);
                         } else {
-                            // Reset về vị trí cũ nếu không thả vào giỏ
                             state.touchItem.style.position = 'static';
                             state.touchItem.style.transform = 'none';
                             playSound('wrong');
@@ -525,7 +511,6 @@
                 });
             };
 
-            // Khởi tạo ngay khi tải xong
             return {
                 init: initEvents,
                 start: start,
@@ -535,7 +520,6 @@
             };
         })();
 
-        // Chạy game
         document.addEventListener('DOMContentLoaded', GameApp.init);
     </script>
 </body>
